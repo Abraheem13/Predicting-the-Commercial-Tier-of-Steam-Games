@@ -278,6 +278,15 @@ def run_classification():
         FIGURES / "10_rf_prelaunch_per_class.csv", index=False
     )
 
+    # Persist test labels/predictions/probabilities for standalone evaluation scripts.
+    eval_out = pd.DataFrame({
+        "y_true": pd.Series(y_test).astype(str).to_numpy(),
+        "y_pred": pd.Series(res_tuned["y_pred"]).astype(str).to_numpy(),
+    })
+    eval_out.to_csv(DATA_PROCESSED / "clf_eval_rf_tuned_predictions.csv", index=False)
+    proba_out = pd.DataFrame(res_tuned["y_proba"], columns=CLASS_ORDER)
+    proba_out.to_csv(DATA_PROCESSED / "clf_eval_rf_tuned_proba.csv", index=False)
+
     # -------- Feature importance on the TUNED full-feature model --------
     print("\n--- Feature importance (tuned model) ---")
 
